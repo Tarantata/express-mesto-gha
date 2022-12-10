@@ -56,7 +56,10 @@ const likeCard = async (req, res) => {
 const dislikeCard = async (req, res) => {
   try {
     const { cardId } = req.params;
-    const card = await Card.findByIdAndUpdate(cardId, { $pull: { likes: req.user._id } }, { new: true });
+    const card = await Card.findByIdAndUpdate(cardId, { $pull: { likes: req.user._id } }, {
+      new: true,
+      runValidators: true,
+    });
     if (!card) {
       return res.status(404).json({ message: 'Введены некорректные данные для снятия лайка' });
     }
