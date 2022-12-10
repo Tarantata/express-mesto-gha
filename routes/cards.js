@@ -9,8 +9,8 @@ routerCard.post('/', createCard);
 
 routerCard.delete('/:cardId', deleteCardById);
 
-routerCard.put('/likes', likeCard);
+routerCard.put('/:cardId/likes', likeCard);
 
-routerCard.delete('/likes', dislikeCard);
+routerCard.delete('/:cardId/likes', dislikeCard);
 
 module.exports = routerCard;

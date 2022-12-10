@@ -43,9 +43,9 @@ const likeCard = async (req, res) => {
     if (!card) {
       return res.status(400).json({ message: 'Введены некорректные данные для постановки лайка' });
     }
-    if (card === null) {
-      return res.status(404).json({ message: 'Передан несуществующий _id карточки' });
-    }
+    // if (card === null) {
+    //   return res.status(404).json({ message: 'Передан несуществующий _id карточки' });
+    // }
     return res.status(201).json(card);
   } catch (err) {
     return res.status(500).json({ message: 'Произошла ошибка' });
@@ -60,9 +60,9 @@ const dislikeCard = async (req, res) => {
     if (!card) {
       return res.status(400).json({ message: 'Введены некорректные данные для снятия лайка' });
     }
-    if (card === null) {
-      return res.status(404).json({ message: 'Передан несуществующий _id карточки' });
-    }
+    // if (card === null) {
+    //   return res.status(404).json({ message: 'Передан несуществующий _id карточки' });
+    // }
     return res.status(201).json(card);
   } catch (err) {
     return res.status(500).json({ message: 'Произошла ошибка' });
