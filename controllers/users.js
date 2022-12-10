@@ -18,7 +18,7 @@ const getUsers = async (req, res) => {
 const getUserById = async (req, res) => {
   try {
     const { userId } = req.params;
-    const user = User.findById(userId);
+    const user = await User.findById(userId);
 
     if (!user) {
       return res.status(404).json({ message: 'Пользователь не найден' });
@@ -33,7 +33,7 @@ const getUserById = async (req, res) => {
 const createUser = async (req, res) => {
   try {
     const { name, about, avatar } = req.body;
-    const user = User.create({ name, about, avatar });
+    const user = await User.create({ name, about, avatar });
     if (!user) {
       return res.status(400).json({ message: 'Введены некорректные данные при создании пользователя' });
     }
