@@ -39,13 +39,13 @@ const deleteCardById = async (req, res) => {
 const likeCard = async (req, res) => {
   try {
     const { cardId } = req.params;
-    const card = await Card.findByIdAndUpdate(cardId, { $addToSet: { likes: req.user._id } });
+    const card = await Card.findByIdAndUpdate(cardId, { $addToSet: { likes: req.user._id } }, {
+      new: true,
+      runValidators: true,
+    });
     if (!card) {
       return res.status(400).json({ message: 'Введены некорректные данные для постановки лайка' });
     }
-    // if (card === null) {
-    //   return res.status(404).json({ message: 'Передан несуществующий _id карточки' });
-    // }
     return res.status(201).json(card);
   } catch (err) {
     return res.status(500).json({ message: 'Произошла ошибка' });
@@ -56,13 +56,10 @@ const likeCard = async (req, res) => {
 const dislikeCard = async (req, res) => {
   try {
     const { cardId } = req.params;
-    const card = await Card.findByIdAndUpdate(cardId, { $pull: { likes: req.user._id } });
+    const card = await Card.findByIdAndUpdate(cardId, { $pull: { likes: req.user._id } }, { new: true });
     if (!card) {
       return res.status(400).json({ message: 'Введены некорректные данные для снятия лайка' });
     }
-    // if (card === null) {
-    //   return res.status(404).json({ message: 'Передан несуществующий _id карточки' });
-    // }
     return res.status(201).json(card);
   } catch (err) {
     return res.status(500).json({ message: 'Произошла ошибка' });
