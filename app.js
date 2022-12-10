@@ -12,7 +12,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use((req, res, next) => {
   req.user = {
-    _id: '638f652d2e289e79f06d48db' // вставьте сюда _id созданного в предыдущем пункте пользователя
+    _id: '638f652d2e289e79f06d48db', // вставьте сюда _id созданного в предыдущем пункте пользователя
   };
   next();
 });
@@ -21,7 +21,7 @@ app.use('/users', routerUser);
 app.use('/cards', routerCard);
 
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
-  useNewUrlParser : true,
+  useNewUrlParser: true,
 }, () => {
   console.log('Connected to MongoDB!');
   app.listen(PORT, () => {
