@@ -44,7 +44,7 @@ const likeCard = async (req, res) => {
       runValidators: true,
     });
     if (!card) {
-      return res.status(400).json({ message: 'Введены некорректные данные для постановки лайка' });
+      return res.status(404).json({ message: 'Введены некорректные данные для постановки лайка' });
     }
     return res.status(201).json(card);
   } catch (err) {
@@ -58,7 +58,7 @@ const dislikeCard = async (req, res) => {
     const { cardId } = req.params;
     const card = await Card.findByIdAndUpdate(cardId, { $pull: { likes: req.user._id } }, { new: true });
     if (!card) {
-      return res.status(400).json({ message: 'Введены некорректные данные для снятия лайка' });
+      return res.status(404).json({ message: 'Введены некорректные данные для снятия лайка' });
     }
     return res.status(201).json(card);
   } catch (err) {
