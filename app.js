@@ -20,6 +20,10 @@ app.use((req, res, next) => {
 app.use('/users', routerUser);
 app.use('/cards', routerCard);
 
+app.use('*', (req, res) => {
+  return res.status(404).json({ message: 'Страница не найдена' });
+});
+
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
   useNewUrlParser: true,
 }, () => {
