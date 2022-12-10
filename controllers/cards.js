@@ -44,11 +44,13 @@ const likeCard = async (req, res) => {
       runValidators: true,
     });
     if (!card) {
-      return res.status(404).json({ message: 'Введены некорректные данные для постановки лайка' });
+      return res.status(404).json({ message: 'Передан несуществующий ID карточки' });
     }
     return res.status(201).json(card);
   } catch (err) {
-    return res.status(500).json({ message: 'Произошла ошибка' });
+    if (err.name === 'CastError') {
+      return res.status(400).json({message: 'Переданы некорректные данные для постановки/снятии лайка. '});
+    }
   }
 // return res.status(200).json({message: 'Test CardLike'})
 };
@@ -61,11 +63,13 @@ const dislikeCard = async (req, res) => {
       runValidators: true,
     });
     if (!card) {
-      return res.status(404).json({ message: 'Введены некорректные данные для снятия лайка' });
+      return res.status(404).json({ message: 'Передан несуществующий ID карточки' });
     }
     return res.status(201).json(card);
   } catch (err) {
-    return res.status(500).json({ message: 'Произошла ошибка' });
+    if (err.name === 'CastError') {
+      return res.status(400).json({message: 'Переданы некорректные данные для постановки/снятии лайка. '});
+    }
   }
 // return res.status(200).json({message: 'Test CardDisLike'})
 };
