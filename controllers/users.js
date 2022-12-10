@@ -79,7 +79,7 @@ const updateUserAvatar = async (req, res) => {
     if (user === null) {
       return res.status(404).json({ message: 'Пользователь с указанным _id не найден' });
     }
-    return res.status(201).json(user);
+    return res.status(200).json(user);
   } catch (err) {
     return res.status(500).json({ message: 'Произошла ошибка' });
   }
