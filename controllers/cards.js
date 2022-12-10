@@ -46,7 +46,7 @@ const likeCard = async (req, res) => {
     if (!card) {
       return res.status(404).json({ message: 'Передан несуществующий ID карточки' });
     }
-    return res.status(201).json(card);
+    return res.status(200).json(card);
   } catch (err) {
     if (err.name === 'CastError') {
       return res.status(400).json({message: 'Переданы некорректные данные для постановки/снятии лайка. '});
@@ -65,7 +65,7 @@ const dislikeCard = async (req, res) => {
     if (!card) {
       return res.status(404).json({ message: 'Передан несуществующий ID карточки' });
     }
-    return res.status(201).json(card);
+    return res.status(200).json(card);
   } catch (err) {
     if (err.name === 'CastError') {
       return res.status(400).json({message: 'Переданы некорректные данные для постановки/снятии лайка. '});
