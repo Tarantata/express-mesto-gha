@@ -31,7 +31,7 @@ const deleteCardById = async (req, res) => {
     }
     return res.status(200).json({ message: 'Карточка удалена' });
   } catch (err) {
-    return res.status(500).json({ message: 'Произошла ошибка' });
+    return res.status(400).json({ message: 'Переданы некорректные данные при удалении карточки. ' });
   }
   // return res.status(200).json({message: 'Test deleteCard by ID'})
 };
