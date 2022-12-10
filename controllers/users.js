@@ -17,8 +17,8 @@ const getUsers = async (req, res) => {
 
 const getUserById = async (req, res) => {
   try {
-    const { userId } = req.params;
-    const user = await User.findById(userId);
+    const { _id } = req.params;
+    const user = await User.findById(_id);
 
     if (!user) {
       return res.status(404).json({ message: 'Пользователь не найден' });
@@ -58,12 +58,12 @@ const updateUserProfile = async (req, res) => {
     if (!user) {
       return res.status(400).json({ message: 'Введены некорректные данные при создании пользователя' });
     }
-    if (user === null) {
-      return res.status(404).json({ message: 'Пользователь с указанным _id не найден' });
-    }
+    // if (user === null) {
+    //   return res.status(404).json({ message: 'Пользователь с указанным _id не найден' });
+    // }
     return res.status(201).json(user);
   } catch (err) {
-    return res.status(400).json(err);
+    return res.status(400).json({ message: 'Введены некорректные данные при создании пользователя' });
   }
   // return res.status(200).json({message: 'Test UpdateProfile'})
 };
@@ -84,7 +84,7 @@ const updateUserAvatar = async (req, res) => {
     }
     return res.status(201).json(user);
   } catch (err) {
-    return res.status(500).json(err);
+    return res.status(500).json({ message: 'Произошла ошибка' });
   }
   // return res.status(200).json({message: 'Test UpdateAvatar'})
 };
