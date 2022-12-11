@@ -60,7 +60,10 @@ const updateUserProfile = async (req, res) => {
     }
     return res.status(200).json(user);
   } catch (err) {
-    return res.status(400).json({ message: 'Введены некорректные данные при создании пользователя' });
+    if (err.name === 'ValidationError') {
+      return res.status(400).json({ message: 'Введены некорректные данные при создании пользователя' });
+    }
+    return res.status(500).json({ message: 'Произошла ошибка' });
   }
   // return res.status(200).json({message: 'Test UpdateProfile'})
 };
@@ -81,6 +84,10 @@ const updateUserAvatar = async (req, res) => {
     }
     return res.status(200).json(user);
   } catch (err) {
+    /* return res.status(500).json({ message: 'Произошла ошибка' }); */
+    if (err.name === 'ValidationError') {
+      return res.status(400).json({ message: 'Введены некорректные данные при создании пользователя' });
+    }
     return res.status(500).json({ message: 'Произошла ошибка' });
   }
   // return res.status(200).json({message: 'Test UpdateAvatar'})

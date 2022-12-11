@@ -17,11 +17,10 @@ const createCard = async (req, res) => {
     const card = await Card.create({ name, link, owner });
     return res.status(201).json(card);
   } catch (err) {
-      if (err.name === 'ValidationError') {
-        return res.status(400).json({message: 'Введены некорректные данные при создании карточки'})
-      } else {
-        return res.status(500).json({ message: 'Произошла ошибка' })
-      }
+    if (err.name === 'ValidationError') {
+      return res.status(400).json({ message: 'Введены некорректные данные при создании карточки' });
+    }
+    return res.status(500).json({ message: 'Произошла ошибка' });
   }
 //   return res.status(200).json({message: 'Test to post'})
 };
