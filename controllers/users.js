@@ -84,7 +84,6 @@ const updateUserAvatar = async (req, res) => {
     }
     return res.status(200).json(user);
   } catch (err) {
-    /* return res.status(500).json({ message: 'Произошла ошибка' }); */
     if (err.name === 'ValidationError') {
       return res.status(400).json({ message: 'Введены некорректные данные при создании пользователя' });
     }
