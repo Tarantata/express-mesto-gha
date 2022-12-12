@@ -34,9 +34,9 @@ const createUser = async (req, res) => {
   try {
     const { name, about, avatar } = req.body;
     const user = await User.create({ name, about, avatar });
-    if (!user) {
-      return res.status(400).json({ message: 'Введены некорректные данные при создании пользователя' });
-    }
+    // if (!user) {
+    //   return res.status(400).json({ message: 'Введены некорректные данные при создании пользователя' });
+    // }
     return res.status(201).json(user);
   } catch (err) {
     if (err.name === 'ValidationError') {
@@ -56,7 +56,7 @@ const updateUserProfile = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(400).json({ message: 'Введены некорректные данные при создании пользователя' });
+      return res.status(404).json({ message: 'Пользователь не найден' });
     }
     return res.status(200).json(user);
   } catch (err) {
