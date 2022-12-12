@@ -25,29 +25,11 @@ const createCard = async (req, res) => {
 //   return res.status(200).json({message: 'Test to post'})
 };
 
-// const deleteCardById = async (req, res) => {
-//   try {
-//     const { cardId } = req.params;
-//     const card = await Card.findByIdAndRemove(cardId);
-//     if (!card) {
-//       return res.status(404).json({ message: 'Карточка с указанным _id не найдена' });
-//     }
-//     return res.status(200).json({ message: 'Карточка удалена' });
-//   } catch (err) {
-//     return res.status(400).json({ message: 'Переданы некорректные
-//     данные при удалении карточки. ' });
-//   }
-//   // return res.status(200).json({message: 'Test deleteCard by ID'})
-// };
-
 const deleteCardById = async (req, res) => {
   try {
     const { cardId } = req.params;
-    /* const card = */ await Card.findByIdAndRemove(cardId)
+    await Card.findByIdAndRemove(cardId)
       .orFail(() => res.status(404).json({ message: 'Карточка с указанным _id не найдена' }));
-    // if (!card) {
-    //   return res.status(404).json({ message: 'Карточка с указанным _id не найдена' });
-    // }
     return res.status(200).json({ message: 'Карточка удалена' });
   } catch (err) {
     return res.status(400).json({ message: 'Переданы некорректные данные при удалении карточки. ' });
@@ -58,14 +40,12 @@ const deleteCardById = async (req, res) => {
 const likeCard = async (req, res) => {
   try {
     const { cardId } = req.params;
-    const card = await Card.findByIdAndUpdate(cardId, { $addToSet: { likes: req.user._id } }, {
+    await Card.findByIdAndUpdate(cardId, { $addToSet: { likes: req.user._id } }, {
       new: true,
       runValidators: true,
-    });
-    if (!card) {
-      return res.status(404).json({ message: 'Передан несуществующий ID карточки' });
-    }
-    return res.status(200).json(card);
+    })
+      .orFail(() => res.status(404).json({ message: 'Передан несуществующий ID карточки' }));
+    return res.status(200).json({ message: 'Лайк установлен' });
   } catch (err) {
     return res.status(400).json({ message: 'Переданы некорректные данные для постановки/снятия лайка.' });
   }
