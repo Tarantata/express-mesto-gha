@@ -1,13 +1,15 @@
 // const http = require('http');
 const express = require('express');
 const mongoose = require('mongoose');
-
+const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const routerUser = require('./routes/users');
 const routerCard = require('./routes/cards');
 
 const PORT = 3000;
 const app = express();
+
+app.use(helmet());
 
 app.use(bodyParser.json());
 app.use((req, res, next) => {
