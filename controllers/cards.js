@@ -32,7 +32,10 @@ const deleteCardById = async (req, res) => {
       .orFail(() => res.status(404).json({ message: 'Карточка с указанным _id не найдена' }));
     return res.status(200).json({ message: 'Карточка удалена' });
   } catch (err) {
-    return res.status(400).json({ message: 'Переданы некорректные данные при удалении карточки. ' });
+    if (err.name === 'CastError') {
+      return res.status(400).json({ message: 'Переданы некорректные данные при удалении карточки. ' });
+    }
+    return res.status(500).send({ message: 'Произошла ошибка' });
   }
   // return res.status(200).json({message: 'Test deleteCard by ID'})
 };
@@ -47,7 +50,10 @@ const likeCard = async (req, res) => {
       .orFail(() => res.status(404).json({ message: 'Передан несуществующий ID карточки' }));
     return res.status(200).json({ message: 'Лайк установлен' });
   } catch (err) {
-    return res.status(400).json({ message: 'Переданы некорректные данные для постановки/снятия лайка.' });
+    if (err.name === 'CastError') {
+      return res.status(400).json({ message: 'Переданы некорректные данные при удалении карточки. ' });
+    }
+    return res.status(500).send({ message: 'Произошла ошибка' });
   }
 // return res.status(200).json({message: 'Test CardLike'})
 };
@@ -64,7 +70,10 @@ const dislikeCard = async (req, res) => {
     }
     return res.status(200).json(card);
   } catch (err) {
-    return res.status(400).json({ message: 'Переданы некорректные данные для постановки/снятия лайка.' });
+    if (err.name === 'CastError') {
+      return res.status(400).json({ message: 'Переданы некорректные данные при удалении карточки. ' });
+    }
+    return res.status(500).send({ message: 'Произошла ошибка' });
   }
 // return res.status(200).json({message: 'Test CardDisLike'})
 };
