@@ -21,21 +21,44 @@
 //   return next();
 // };
 
-require('dotenv').config();
-const jwt = require('jsonwebtoken');
-const UnauthorizedError = require('../errors/unathorizedError');
+// require('dotenv').config();
+// const jwt = require('jsonwebtoken');
+// const UnauthorizedError = require('../errors/unathorizedError');
+//
+// const { NODE_ENV, JWT_SECRET } = process.env;
+//
+// module.exports = (req, res, next) => {
+//   const token = req.cookies.jwt;
+//   if (token == null) {
+//     return next(new UnauthorizedError('Необходима авторизация'));
+//   } let payload;
+//   try {
+//     payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
+//   } catch (err) {
+//     return next(new UnauthorizedError('Необходима авторизация'));
+//   } req.user = payload;
+//   return next();
+// };
+
+const jsonwebtoken = require('jsonwebtoken');
+const { AuthorizationError } = require('../errors/unathorizedError');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 module.exports = (req, res, next) => {
-  const token = req.cookies.jwt;
-  if (token == null) {
-    return next(new UnauthorizedError('Необходима авторизация'));
-  } let payload;
+  const { jwt } = req.cookies;
+  if (!jwt) {
+    return res
+      .status(401)
+      .send({ message: 'Необходима авторизация' });
+  }
+  let payload;
   try {
-    payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
+    payload = jsonwebtoken.verify(jwt, NODE_ENV ? JWT_SECRET : 'dev-secret');
   } catch (err) {
-    return next(new UnauthorizedError('Необходима авторизация'));
-  } req.user = payload;
-  return next();
+    next(new AuthorizationError({ message: 'Необходима авторизация' }));
+  }
+  req.user = payload;
+  next();
+  return true;
 };
