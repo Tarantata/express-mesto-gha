@@ -16,12 +16,6 @@ const app = express();
 app.use(helmet());
 
 app.use(bodyParser.json());
-// app.use((req, res, next) => {
-//   req.user = {
-//     _id: '638f652d2e289e79f06d48db',
-//   };
-//   next();
-// });
 
 app.post('/signup', validateCreateUser, createUser); // работает
 app.post('/signin', validateLogin, login);
@@ -32,7 +26,6 @@ app.use('/cards', routerCard);
 app.use('/users', routerUser);
 app.use('*', (req, res, next) => {
   next(new NotFoundError('Страница не найдена'));
-  // res.status(404).json({ message: 'Страница не найдена' })
 });
 
 app.use(errors());
@@ -40,7 +33,7 @@ app.use(errors());
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
   res.status(statusCode).send({ message: statusCode === 500 ? 'Ошибка работы сервера' : message });
-  next();
+  return next();
 });
 
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
