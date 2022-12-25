@@ -1,16 +1,19 @@
 const Card = require('../models/card');
+const BadRequestError = require('../errors/badRequestError');
+const NotFoundError = require('../errors/notFoundError');
+const ForbiddenError = require('../errors/forbiddenError');
 
-const getCards = async (req, res) => {
+const getCards = async (req, res, next) => {
   try {
     const cards = await Card.find({});
     return res.status(200).json(cards);
   } catch (err) {
-    return res.status(500).json({ message: 'Произошла ошибка' });
+    return next(err);
+  //   return res.status(500).json({ message: 'Произошла ошибка' });
   }
-  // return res.status(200).json({message: 'Test'})
 };
 
-const createCard = async (req, res) => {
+const createCard = async (req, res, next) => {
   try {
     const owner = req.user._id;
     const { name, link } = req.body;
@@ -18,29 +21,44 @@ const createCard = async (req, res) => {
     return res.status(201).json(card);
   } catch (err) {
     if (err.name === 'ValidationError') {
-      return res.status(400).json({ message: 'Введены некорректные данные при создании карточки' });
+      return next(new BadRequestError('Введены некорректные данные при создании карточки'));
+      // return res.status(400).json({ message: 'Введены некорректные
+      // данные при создании карточки' });
     }
-    return res.status(500).json({ message: 'Произошла ошибка' });
+    return next(err);
+
+    // return res.status(500).json({ message: 'Произошла ошибка' });
   }
-//   return res.status(200).json({message: 'Test to post'})
 };
 
-const deleteCardById = async (req, res) => {
+const deleteCardById = async (req, res, next) => {
   try {
     const { cardId } = req.params;
-    await Card.findByIdAndRemove(cardId)
-      .orFail(() => res.status(404).json({ message: 'Карточка с указанным _id не найдена' }));
+    const card = await Card.findById(cardId);
+    if (card === null) {
+      return new NotFoundError('Карточка с указанным _id не найдена');
+      // return res.status(404).json({ message: 'Карточка с указанным _id не найдена' });
+    }
+    const ownerId = card.owner._id.toString();
+    if (ownerId !== req.user._id) {
+      return new ForbiddenError('Вы не можете удалять чужие карточки');
+      // return res.status(403).json({ message: 'Вы не можете удалять чужие карточки ' });
+    }
+    await card.remove();
     return res.status(200).json({ message: 'Карточка удалена' });
   } catch (err) {
     if (err.name === 'CastError') {
-      return res.status(400).json({ message: 'Переданы некорректные данные при удалении карточки. ' });
+      return next(new BadRequestError('Переданы некорректные данные при удалении карточки.'));
+      // return res.status(400).json({ message: 'Переданы некорректные
+      // данные при удалении карточки. ' });
     }
-    return res.status(500).send({ message: 'Произошла ошибка' });
+    return next(err);
+
+    // return res.status(500).send({ message: 'Произошла ошибка' });
   }
-  // return res.status(200).json({message: 'Test deleteCard by ID'})
 };
 
-const likeCard = async (req, res) => {
+const likeCard = async (req, res, next) => {
   try {
     const { cardId } = req.params;
     await Card.findByIdAndUpdate(cardId, { $addToSet: { likes: req.user._id } }, {
@@ -51,16 +69,20 @@ const likeCard = async (req, res) => {
     return res.status(200).json({ message: 'Лайк установлен' });
   } catch (err) {
     if (err.name === 'CastError') {
-      return res.status(400).json({ message: 'Переданы некорректные данные при удалении карточки. ' });
+      return next(new BadRequestError('Переданы некорректные данные при удалении карточки.'));
+      // return res.status(400).json({ message: 'Переданы некорректные
+      // данные при удалении карточки. ' });
     }
-    return res.status(500).send({ message: 'Произошла ошибка' });
+    return next(err);
+
+    // return res.status(500).send({ message: 'Произошла ошибка' });
   }
-// return res.status(200).json({message: 'Test CardLike'})
 };
 
-const dislikeCard = async (req, res) => {
+const dislikeCard = async (req, res, next) => {
   try {
     const { cardId } = req.params;
+    // console.log(req)
     const card = await Card.findByIdAndUpdate(cardId, { $pull: { likes: req.user._id } }, {
       new: true,
       runValidators: true,
@@ -71,11 +93,14 @@ const dislikeCard = async (req, res) => {
     return res.status(200).json(card);
   } catch (err) {
     if (err.name === 'CastError') {
-      return res.status(400).json({ message: 'Переданы некорректные данные при удалении карточки. ' });
+      return next(new BadRequestError('Переданы некорректные данные при удалении карточки.'));
+      // return res.status(400).json({ message: 'Переданы некорректные
+      // данные при удалении карточки. ' });
     }
-    return res.status(500).send({ message: 'Произошла ошибка' });
+    return next(err);
+
+    // return res.status(500).send({ message: 'Произошла ошибка' });
   }
-// return res.status(200).json({message: 'Test CardDisLike'})
 };
 
 module.exports = {
