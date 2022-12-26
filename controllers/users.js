@@ -24,7 +24,9 @@ const createUser = async (req, res, next) => {
     });
 
     return res
-      .status(201).json({name, about, avatar, email});
+      .status(201).json({
+        name, about, avatar, email,
+      });
   } catch (err) {
     if (err.code === MONGO_DUPLICATE_ERROR_CODE) {
       return next(new ConflictError('Данный email уже используется'));
