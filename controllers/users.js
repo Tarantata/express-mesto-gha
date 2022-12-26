@@ -33,12 +33,8 @@ const createUser = async (req, res, next) => {
     }
     if (err.name === 'ValidationError') {
       return next(new BadRequestError('Введены некорректные данные при создании пользователя'));
-      // return res.status(400).json({ message: 'Введены некорректные
-      // данные при создании пользователя' });
     }
     return next(err);
-
-    // return res.status(500).json({ message: 'Произошла ошибка' });
   }
 };
 
@@ -62,7 +58,6 @@ const getUsers = async (req, res, next) => {
     return res.status(200).json(users);
   } catch (err) {
     return next(err);
-    // return res.status(500).json({ message: 'Произошла ошибка' });
   }
 };
 
@@ -77,8 +72,6 @@ const getUserById = async (req, res, next) => {
     return res.status(200).json(user);
   } catch (err) {
     return next(err);
-    // return res.status(400).json({ message: 'Введены некорректные
-    // данные при создании пользователя' });
   }
 };
 
@@ -89,13 +82,11 @@ const getUserInfo = async (req, res, next) => {
 
     if (!user) {
       throw new NotFoundError('Пользователь не найден');
-      // return res.status(404).json({ message: 'Пользователь не найден' });
     }
     return res.status(200).json(user);
   } catch (err) {
     if (err.name === 'CastError') {
       return next(new BadRequestError('Введены некорректные данные'));
-    // return res.status(400).json({ message: 'Введены некорректные данные' });
     }
     return next(err);
   }
@@ -112,18 +103,13 @@ const updateUserProfile = async (req, res, next) => {
 
     if (!user) {
       throw new NotFoundError('Пользователь не найден');
-      // return res.status(404).json({ message: 'Пользователь не найден' });
     }
     return res.status(200).json(user);
   } catch (err) {
     if (err.name === 'ValidationError') {
       return next(new BadRequestError('Переданы некорректные данные'));
-      // return res.status(400).json({ message: 'Введены некорректные
-      // данные при создании пользователя' });
     }
     return next(err);
-
-    // return res.status(500).json({ message: 'Произошла ошибка' });
   }
 };
 
@@ -137,23 +123,16 @@ const updateUserAvatar = async (req, res, next) => {
     });
     if (!URL_PATTERN.test(avatar)) {
       return next(new BadRequestError('Переданы некорректные данные'));
-      // return res.status(400).json({ message: 'Введены некорректные
-      // данные при создании пользователя' });
     }
     if (user === null) {
       return next(new NotFoundError('Пользователь с указанным _id не найден'));
-      // return res.status(404).json({ message: 'Пользователь с указанным _id не найден' });
     }
     return res.status(200).json(user);
   } catch (err) {
     if (err.name === 'ValidationError') {
       return next(new BadRequestError('Переданы некорректные данные'));
-      // return res.status(400).json({ message: 'Введены некорректные
-      // данные при создании пользователя' });
     }
     return next(err);
-
-    // return res.status(500).json({ message: 'Произошла ошибка' });
   }
 };
 

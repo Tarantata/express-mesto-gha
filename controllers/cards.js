@@ -9,7 +9,6 @@ const getCards = async (req, res, next) => {
     return res.status(200).json(cards);
   } catch (err) {
     return next(err);
-  //   return res.status(500).json({ message: 'Произошла ошибка' });
   }
 };
 
@@ -22,12 +21,8 @@ const createCard = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'ValidationError') {
       return next(new BadRequestError('Введены некорректные данные при создании карточки'));
-      // return res.status(400).json({ message: 'Введены некорректные
-      // данные при создании карточки' });
     }
     return next(err);
-
-    // return res.status(500).json({ message: 'Произошла ошибка' });
   }
 };
 
@@ -42,19 +37,14 @@ const deleteCardById = async (req, res, next) => {
     const ownerId = card.owner._id.toString();
     if (ownerId !== req.user._id) {
       throw new ForbiddenError('Вы не можете удалять чужие карточки');
-      // return res.status(403).json({ message: 'Вы не можете удалять чужие карточки ' });
     }
     await card.remove();
     return res.status(200).json({ message: 'Карточка удалена' });
   } catch (err) {
     if (err.name === 'CastError') {
       return next(new BadRequestError('Переданы некорректные данные при удалении карточки.'));
-      // return res.status(400).json({ message: 'Переданы некорректные
-      // данные при удалении карточки. ' });
     }
     return next(err);
-
-    // return res.status(500).send({ message: 'Произошла ошибка' });
   }
 };
 
@@ -70,12 +60,8 @@ const likeCard = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'CastError') {
       return next(new BadRequestError('Переданы некорректные данные при удалении карточки.'));
-      // return res.status(400).json({ message: 'Переданы некорректные
-      // данные при удалении карточки. ' });
     }
     return next(err);
-
-    // return res.status(500).send({ message: 'Произошла ошибка' });
   }
 };
 
@@ -94,12 +80,8 @@ const dislikeCard = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'CastError') {
       return next(new BadRequestError('Переданы некорректные данные при удалении карточки.'));
-      // return res.status(400).json({ message: 'Переданы некорректные
-      // данные при удалении карточки. ' });
     }
     return next(err);
-
-    // return res.status(500).send({ message: 'Произошла ошибка' });
   }
 };
 
