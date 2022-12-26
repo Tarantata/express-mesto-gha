@@ -49,11 +49,7 @@ const login = async (req, res, next) => {
     const token = await jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
     return res.status(200).json({ token });
   } catch (err) {
-    if (err.statusCode === 401) {
-      return next(new UnauthorizedError('Передан некорректный email или пароль'));
-      // return res.status(401).json({ message: 'Передан некорректный email или пароль' });
-    }
-    return next(err);
+    return next(new UnauthorizedError('Передан некорректный email или пароль'));
   }
 };
 
