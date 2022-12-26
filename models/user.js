@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const { formLink } = require('./forms');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -21,6 +22,10 @@ const userSchema = new mongoose.Schema({
     required: false,
     default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
     name: 'Картинка',
+    validate: {
+      validator: (v) => formLink.test(v),
+      message: 'Неверно указан формат ссылки',
+    },
   },
   email: {
     type: String,
@@ -30,7 +35,7 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    minlength: 8,
+    // minlength: 8,
     select: false,
   },
 });

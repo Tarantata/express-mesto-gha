@@ -6,7 +6,8 @@ const ForbiddenError = require('../errors/forbiddenError');
 const getCards = async (req, res, next) => {
   try {
     const cards = await Card.find({});
-    return res.status(200).json(cards);
+    // return res.status(200).json(cards);
+    return res.status(200).send(cards);
   } catch (err) {
     return next(err);
   }
@@ -51,12 +52,15 @@ const deleteCardById = async (req, res, next) => {
 const likeCard = async (req, res, next) => {
   try {
     const { cardId } = req.params;
-    await Card.findByIdAndUpdate(cardId, { $addToSet: { likes: req.user._id } }, {
+    const card = await Card.findByIdAndUpdate(cardId, { $addToSet: { likes: req.user._id } }, {
       new: true,
       runValidators: true,
-    })
-      .orFail(() => res.status(404).json({ message: 'Передан несуществующий ID карточки' }));
-    return res.status(200).json({ message: 'Лайк установлен' });
+    });
+    // .orFail(() => res.status(404).json({ message: 'Передан несуществующий ID карточки' }));
+    if (!card) {
+      throw new NotFoundError('Передан несуществующий ID карточки');
+    }
+    return res.status(200).json(card);
   } catch (err) {
     if (err.name === 'CastError') {
       return next(new BadRequestError('Переданы некорректные данные при удалении карточки.'));
@@ -74,7 +78,8 @@ const dislikeCard = async (req, res, next) => {
       runValidators: true,
     });
     if (!card) {
-      return res.status(404).json({ message: 'Передан несуществующий ID карточки' });
+      throw new NotFoundError('Передан несуществующий ID карточки');
+      // return res.status(404).json({ message: 'Передан несуществующий ID карточки' });
     }
     return res.status(200).json(card);
   } catch (err) {

@@ -9,6 +9,7 @@ const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const { validateLogin, validateCreateUser } = require('./middlewares/validation');
 const NotFoundError = require('./errors/notFoundError');
+const { errorHandler } = require('./middlewares/errorsHandler');
 
 // const PORT = 3000;
 const app = express();
@@ -30,12 +31,13 @@ app.use('*', (req, res, next) => {
 });
 
 app.use(errors());
-
-app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
-  res.status(statusCode).send({ message: statusCode === 500 ? 'Ошибка работы сервера' : message });
-  return next();
-});
+app.use(errorHandler);
+// app.use((err, req, res, next) => {
+//   const { statusCode = 500, message } = err;
+//   res.status(statusCode).send({ message: statusCode === 500
+//   ? 'Ошибка работы сервера' : message });
+//   return next();
+// });
 
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
   useNewUrlParser: true,
