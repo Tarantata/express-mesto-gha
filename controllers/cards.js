@@ -36,12 +36,12 @@ const deleteCardById = async (req, res, next) => {
     const { cardId } = req.params;
     const card = await Card.findById(cardId);
     if (card === null) {
-      return new NotFoundError('Карточка с указанным _id не найдена');
+      throw new NotFoundError('Карточка с указанным _id не найдена');
       // return res.status(404).json({ message: 'Карточка с указанным _id не найдена' });
     }
     const ownerId = card.owner._id.toString();
     if (ownerId !== req.user._id) {
-      return new ForbiddenError('Вы не можете удалять чужие карточки');
+      throw new ForbiddenError('Вы не можете удалять чужие карточки');
       // return res.status(403).json({ message: 'Вы не можете удалять чужие карточки ' });
     }
     await card.remove();

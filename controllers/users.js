@@ -90,7 +90,7 @@ const getUserInfo = async (req, res, next) => {
     const user = await User.findById(_id);
 
     if (!user) {
-      return new NotFoundError('Пользователь не найден');
+      throw new NotFoundError('Пользователь не найден');
       // return res.status(404).json({ message: 'Пользователь не найден' });
     }
     return res.status(200).json(user);
@@ -113,7 +113,7 @@ const updateUserProfile = async (req, res, next) => {
     });
 
     if (!user) {
-      return new NotFoundError('Пользователь не найден');
+      throw new NotFoundError('Пользователь не найден');
       // return res.status(404).json({ message: 'Пользователь не найден' });
     }
     return res.status(200).json(user);
