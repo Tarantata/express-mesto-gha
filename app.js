@@ -6,7 +6,7 @@ const { errors } = require('celebrate');
 const routerUser = require('./routes/users');
 const routerCard = require('./routes/cards');
 const { createUser, login } = require('./controllers/users');
-const auth = require('./middlewares/auth');
+// const auth = require('./middlewares/auth');
 const { validateLogin, validateCreateUser } = require('./middlewares/validation');
 const NotFoundError = require('./errors/notFoundError');
 
@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 app.post('/signup', validateCreateUser, createUser); // работает
 app.post('/signin', validateLogin, login);
 
-app.use(auth);
+// app.use(auth);
 
 app.use('/cards', routerCard);
 app.use('/users', routerUser);
