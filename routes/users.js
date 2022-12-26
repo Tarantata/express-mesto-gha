@@ -6,12 +6,12 @@ const { validateGetUserById, validateUpdateProfile, validateUpdateAvatar } = req
 
 routerUser.get('/', getUsers);
 
+routerUser.get('/me', getUserInfo);
+
 routerUser.get('/:_id', validateGetUserById, getUserById);
 
 routerUser.patch('/me', validateUpdateProfile, updateUserProfile);
 
 routerUser.patch('/me/avatar', validateUpdateAvatar, updateUserAvatar);
-
-routerUser.get('/me', getUserInfo);
 
 module.exports = routerUser;
