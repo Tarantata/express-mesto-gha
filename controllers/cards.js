@@ -6,7 +6,6 @@ const ForbiddenError = require('../errors/forbiddenError');
 const getCards = async (req, res, next) => {
   try {
     const cards = await Card.find({});
-    // return res.status(200).json(cards);
     return res.status(200).send(cards);
   } catch (err) {
     return next(err);
@@ -33,7 +32,6 @@ const deleteCardById = async (req, res, next) => {
     const card = await Card.findById(cardId);
     if (card === null) {
       throw new NotFoundError('Карточка с указанным _id не найдена');
-      // return res.status(404).json({ message: 'Карточка с указанным _id не найдена' });
     }
     const ownerId = card.owner._id.toString();
     if (ownerId !== req.user._id) {
@@ -56,7 +54,6 @@ const likeCard = async (req, res, next) => {
       new: true,
       runValidators: true,
     });
-    // .orFail(() => res.status(404).json({ message: 'Передан несуществующий ID карточки' }));
     if (!card) {
       throw new NotFoundError('Передан несуществующий ID карточки');
     }
@@ -72,14 +69,12 @@ const likeCard = async (req, res, next) => {
 const dislikeCard = async (req, res, next) => {
   try {
     const { cardId } = req.params;
-    // console.log(req)
     const card = await Card.findByIdAndUpdate(cardId, { $pull: { likes: req.user._id } }, {
       new: true,
       runValidators: true,
     });
     if (!card) {
       throw new NotFoundError('Передан несуществующий ID карточки');
-      // return res.status(404).json({ message: 'Передан несуществующий ID карточки' });
     }
     return res.status(200).json(card);
   } catch (err) {

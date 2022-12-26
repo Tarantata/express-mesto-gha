@@ -10,9 +10,6 @@ const UnauthorizedError = require('../errors/unathorizedError');
 
 const SALT_ROUNDS = 10;
 
-// const URL_PATTERN =
-// /^https?:\/\/(?:w{3}\.)?(?:[a-z0-9]+[a-z0-9-]*\.)+[a-z]{2,}(?::[0-9]+)?(?:\/\S*)?#?$/i;
-
 const createUser = async (req, res, next) => {
   try {
     const {
@@ -54,7 +51,6 @@ const getUsers = async (req, res, next) => {
   try {
     const users = await User.find({});
     if (!users) {
-      // return res.status(404).json({ message: 'Пользователь не найден' });
       throw new NotFoundError('Пользователь не найден');
     }
     return res.status(200).json(users);
@@ -69,7 +65,6 @@ const getUserById = async (req, res, next) => {
     const user = await User.findById(_id);
 
     if (!user) {
-      // return res.status(404).json({ message: 'Пользователь не найден' });
       throw new NotFoundError('Пользователь не найден');
     }
     return res.status(200).json(user);
@@ -124,9 +119,6 @@ const updateUserAvatar = async (req, res, next) => {
       new: true,
       runValidators: true,
     });
-    // if (!URL_PATTERN.test(avatar)) {
-    //   return next(new BadRequestError('Переданы некорректные данные'));
-    // }
     if (user === null) {
       return next(new NotFoundError('Пользователь с указанным _id не найден'));
     }
