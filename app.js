@@ -10,8 +10,9 @@ const auth = require('./middlewares/auth');
 const { validateLogin, validateCreateUser } = require('./middlewares/validation');
 const NotFoundError = require('./errors/notFoundError');
 
-const PORT = 3000;
+// const PORT = 3000;
 const app = express();
+const { PORT = 3000 } = process.env;
 
 app.use(helmet());
 
