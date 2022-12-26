@@ -55,34 +55,34 @@ const login = async (req, res, next) => {
   }
 };
 
-const getUsers = async (req, res, next) => {
-  try {
-    const users = await User.find({});
-    if (!users) {
-      return res.status(404).json({ message: 'Пользователь не найден' });
-    }
-    return res.status(200).json(users);
-  } catch (err) {
-    return next(err);
-    // return res.status(500).json({ message: 'Произошла ошибка' });
-  }
-};
+// const getUsers = async (req, res, next) => {
+//   try {
+//     const users = await User.find({});
+//     if (!users) {
+//       return res.status(404).json({ message: 'Пользователь не найден' });
+//     }
+//     return res.status(200).json(users);
+//   } catch (err) {
+//     return next(err);
+//     // return res.status(500).json({ message: 'Произошла ошибка' });
+//   }
+// };
 
-const getUserById = async (req, res, next) => {
-  try {
-    const { _id } = req.params;
-    const user = await User.findById(_id);
-
-    if (!user) {
-      return res.status(404).json({ message: 'Пользователь не найден' });
-    }
-    return res.status(200).json(user);
-  } catch (err) {
-    return next(err);
-    // return res.status(400).json({ message: 'Введены некорректные
-    // данные при создании пользователя' });
-  }
-};
+// const getUserById = async (req, res, next) => {
+//   try {
+//     const { _id } = req.params;
+//     const user = await User.findById(_id);
+//
+//     if (!user) {
+//       return res.status(404).json({ message: 'Пользователь не найден' });
+//     }
+//     return res.status(200).json(user);
+//   } catch (err) {
+//     return next(err);
+//     // return res.status(400).json({ message: 'Введены некорректные
+//     // данные при создании пользователя' });
+//   }
+// };
 
 const getUserInfo = async (req, res, next) => {
   try {
