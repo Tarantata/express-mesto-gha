@@ -19,12 +19,12 @@ const createUser = async (req, res, next) => {
     } = req.body;
 
     const hash = await bcrypt.hash(password, SALT_ROUNDS);
-    const user = await User.create({
+    await User.create({
       name, about, avatar, email, password: hash,
     });
 
     return res
-      .status(201).json(user);
+      .status(201).json(name, about, avatar, email);
   } catch (err) {
     if (err.code === MONGO_DUPLICATE_ERROR_CODE) {
       return next(new ConflictError('Данный email уже используется'));
@@ -45,7 +45,7 @@ const login = async (req, res, next) => {
   try {
     const user = await User.findUserByCredentials(email, password);
     const token = await jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
-    return res.status(201).json({ token });
+    return res.status(200).json({ token });
   } catch (err) {
     if (err.statusCode === 401) {
       return next(new UnauthorizedError('Передан некорректный email или пароль'));
